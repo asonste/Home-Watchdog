@@ -1,18 +1,18 @@
 #!/usr/bin/python
 """
-asonste 01/Feb.2016
+asonste 28/June.2016
 Script to be impoted to every other script that is
 accessing .conf file
-Lastest changes: Minor changes to  "options" and "check_option" return value.
+Lastest changes: getcwd does not work from crontab. Base Path must be set manualy
 """
 import ConfigParser
 import os
 config = ConfigParser.ConfigParser(allow_no_value = True)
-dir = os.getcwd() # Current directory
-dir2 = ('%s/usr.conf'%dir) # User config file
-config.read(dir2)
+base_dir = ("/home/pi/Home-Watchdog")# < SET YOUR BASE PATH HERE
+conf_path = ('%s/usr.conf'%base_dir) # User config file)
+config.read(conf_path)
 def write_config(section,subsection,value):
-   cfgfile = open(dir2,'w')
+   cfgfile = open(conf_path,'w')
    config.set(section,subsection,value)
    config.write(cfgfile)
    cfgfile.close()
@@ -20,7 +20,7 @@ def write_config(section,subsection,value):
 def check_section(section):
    if not config.has_section(section):                                
        config.add_section(section)
-       cfgfile = open(dir2,'w')
+       cfgfile = open(conf_path,'w')
        config.write(cfgfile)
        cfgfile.close()
        return "added section"
@@ -40,7 +40,7 @@ def options(section):
     return options
 
 if dir != check_option('defult','base_dir'):
-   write_config('defult','base_dir',dir) # writes default path
+   write_config('defult','base_dir',base_dir) # writes default path
 
 #-----------------------------------------------------
 # For testing
