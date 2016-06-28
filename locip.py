@@ -1,16 +1,42 @@
 #/usr/bin/python
 """
-asonste 24/May.2016
-For finding local ip, and IP without tha last IP segment.
+asonste 28/June.2016
+For finding local ip, first IP segment and first three IP segments
+Will also compare IP towards conf file and triger gmail notification if IP has changed.
 """
-import commands
 from conf import *
 from send_gmail import *
 
+import socket, struct, fcntl, os
+sock = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
+sockfd = sock.fileno()
+SIOCGIFADDR = 0x8915
+
+def get_ip(iface = 'eth0'):
+     ifreq = struct.pack('16sH14s', iface, socket.AF_INET, '\x00'*14)
+     try:
+         res = fcntl.ioctl(sockfd, SIOCGIFADDR, ifreq)
+     except:
+         return None
+     ip = struct.unpack('16sH2x4s8x', res)[2]
+     return socket.inet_ntoa(ip)
+
+def ip_specifficpart(ip,no):
+   parts = ip.split('.')
+   return parts[no]
+
 def localip():
-   locIP = commands.getoutput("/sbin/ifconfig").split("\n")[1].split()[1][5:]
-   write_config('defult','locIP',locIP) #write new IP to .conf file
-   return locIP #commands.getoutput("/sbin/ifconfig").split("\n")[1].split()[1][5:] 
+   iface = os.listdir('/sys/class/net/') # List interfaces
+   count = -1
+   for f in iface:
+      count = count +1
+      tmp = iface[count]
+      IP = get_ip('%s'%tmp)
+      #print type(IP)
+      if type(IP) == str:
+         if ip_specifficpart(IP,0) != "127":
+            return IP
+        # print type(IP)
 
 def ip_short(ip):
    ipparts = ip.split('.')
@@ -37,6 +63,7 @@ def check_locip():
 
 #--- For testing ------------- 
 if __name__ == "__main__":
-   print "Local ip: "+ str(localip())
+   print "Specific IP part 1: "+ str(ip_specifficpart(localip(),0))
+   print "Valid IP: "+ str(localip())
    print "Short IP: "+ str(ip_short(localip()))
    print check_locip()
