@@ -1,6 +1,7 @@
 #/usr/bin/python
 """ 
-asonste 23/May-2016 Misc IP Ping utilities.
+asonste 29/June-2016 Misc IP Ping utilities.
+Latest changes: made separate section in .conf file for networking
 """ 
 from locip import *
 from conf import * 
@@ -29,7 +30,7 @@ def pingweb():
 
 def runpingweb(): # Function to be called on from crontab
     result = pingweb()
-    inetstat = config.get('defult', 'inet_con_stat') #Stored inet connection status
+    inetstat = config.get('networking', 'inet_con_stat') #Stored inet connection status
     #print inetstat
     if result == "0":
        count = 0
@@ -42,9 +43,9 @@ def runpingweb(): # Function to be called on from crontab
           text = "No connection to inet"
           return text
           log(text)
-          write_config('defult', 'inet_con_stat', 'disconnected')
+          write_config('networking', 'inet_con_stat', 'disconnected')
     elif inetstat == "disconnected":
-       write_config('defult', 'inet_con_stat', 'connected')
+       write_config('networking', 'inet_con_stat', 'connected')
        text = "inet connection restored" 
        log(text)   
 #-----------------------------------------------------
