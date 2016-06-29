@@ -1,22 +1,25 @@
 #!/usr/bin/python
 """
-asonste 27/jan-2016
+asonste 29/Jun-2016
 Sends a gmail to a predefined email address
 The definition "send_gmail" takes subject and body as arguments. 
 Remember to define your username, password and email address in .conf file
-Latest change: Added online status verification
+Latest change: Added check for "allow_send_gmails" and sent gmails counter. Made separate section in .conf file for email
 """
 from conf import *
 from aliveping import *
-USERNAME = config.get('defult','USERNAME')# Get username from .conf file
-PASSWORD = config.get('defult','PASSWORD')# Get password from .conf file
-address = config.get('defult','address')# Get address from .conf file
+USERNAME = config.get('email','USERNAME')# Get username from .conf file
+PASSWORD = config.get('email','PASSWORD')# Get password from .conf file
+address = config.get('email','address')# Get address from .conf file
+allow_send_gmails = config.get('email','allow_send_gmails')
+no_of_gmails = config.get('email','no_of_gmails_sent')
 from log import * # log.py needs to be in the same directory. Uncomment to disable logging. 
 import smtplib
 from email.mime.text import MIMEText
-#-----------------------------------------------------
+count = 0
+#-----------------------------------------------------	
 def send_gmail(subject, body,address=address):
-    if pingweb() == "1":
+    if pingweb() == "1" and allow_send_gmails == "1":
        msg = MIMEText(body)
        msg['Subject'] = subject
        msg['From'] = USERNAME
@@ -31,6 +34,8 @@ def send_gmail(subject, body,address=address):
        #--- Logging --- 
        text = ("Sendt mail to: %s, subject: %s, body: %s" %(address,subject,body))
        log(text) # Uncomment to disable logging
+       count = int(no_of_gmails) + 1
+       write_config('email','no_of_gmails_sent',str(count))
     elif pingweb() == "0": 
        text = ("Failed to send mail to: %s, subject: %s, body: %s" %(address,subject,body))
        log(text) # Uncomment to disable logging
