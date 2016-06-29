@@ -1,6 +1,6 @@
 #/usr/bin/python
 """
-asonste 28/June.2016
+asonste 29/June.2016
 For finding local ip, first IP segment and first three IP segments
 Will also compare IP towards conf file and triger gmail notification if IP has changed.
 """
@@ -49,10 +49,10 @@ def ip_short(ip):
    return ip_short
 
 def check_locip():
-    lastIP = config.get('defult','locIP')# Get last IP from .conf file     
+    lastIP = config.get('networking','locIP')# Get last IP from .conf file     
     currentIP = localip()
     if lastIP != currentIP: # If true, IP have changed
-       write_config('defult','locIP',currentIP) #write new IP to .conf file
+       write_config('networking','locIP',currentIP) #write new IP to .conf file
        #Send a gmail
        s = ("Local IP changed from " + str(lastIP) + " to " + str(currentIP)) #Email Subject
        b = "" # Email Body
