@@ -1,14 +1,14 @@
 #/usr/bin/python
 """
-asonste 24/May.2016
+asonste 29/June.2016
 For resolving external ip. If run directly, it will
 compare current ip with last ip and send mail if it changed.
-Latest changes: Moved ip check in to its own function. Added check to know if device is online
+Latest changes: Added check for "None" IP. Made separate section in .conf file for networking.
 Future improvements: Need a timeout that will kill the script, if it takes to lont to resolve IP or send Gmail.
 """
 from conf import *
 from send_gmail import *
-lastIP = config.get('defult','lastIP')# Get last IP from .conf file
+lastIP = config.get('networking','lastIP')# Get last IP from .conf file
 from urllib import urlopen
 import re
 url='http://checkip.dyndns.org'
@@ -21,8 +21,8 @@ def extip():
        return lastIP
 def checkip():
     currentIP = extip()
-    if lastIP != currentIP: # If true, IP have changed
-       write_config('defult','lastIP',currentIP) #write new IP to .conf file
+    if lastIP != currentIP and str(currentIP) != "None": # If true, IP have changed
+       write_config('networking','lastIP',currentIP) #write new IP to .conf file
        #Send a gmail
        s = ("External IP changed from " + str(lastIP) + " to " + str(currentIP)) #Email Subject
        b = "" # Email Body
