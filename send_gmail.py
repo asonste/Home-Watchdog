@@ -4,7 +4,7 @@ asonste 29/Jun-2016
 Sends a gmail to a predefined email address
 The definition "send_gmail" takes subject and body as arguments. 
 Remember to define your username, password and email address in .conf file
-Latest change: Added check for "allow_send_gmails" and sent gmails counter. Made separate section in .conf file for email
+Latest change: Added check for "allow_send_gmails" and sent gmails counter. Made separate section in .conf file for email. Add loging for mails disabled.
 """
 from conf import *
 from aliveping import *
@@ -37,8 +37,11 @@ def send_gmail(subject, body,address=address):
        count = int(no_of_gmails) + 1
        write_config('email','no_of_gmails_sent',str(count))
     elif pingweb() == "0": 
-       text = ("Failed to send mail to: %s, subject: %s, body: %s" %(address,subject,body))
+       text = ("No network connection. Failed to send mail to: %s, subject: %s, body: %s" %(address,subject,body))
        log(text) # Uncomment to disable logging
+    else:
+       text = ("Mails disabled. Failed to send mail to: %s, subject: %s, body: %s" %(address,subject,body))
+       log(text)
 #-----------------------------------------------------
 # For testing
 if __name__ == '__main__':
