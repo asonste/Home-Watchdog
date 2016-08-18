@@ -1,9 +1,9 @@
 #!/usr/bin/python
 """
-asonste 28/June.2016
+asonste 16/Aug.2016
 Script to be impoted to every other script that is
 accessing .conf file
-Lastest changes: getcwd does not work from crontab. Base Path must be set manualy
+Latest changes: Changed check_option to automatically add option if it does not exist.
 """
 import ConfigParser
 import os
@@ -33,7 +33,11 @@ def check_option(section,option):
    if config.has_option(section,option):
       return config.get(section,option)
    else:
-      return "option does not exist"
+      config.set(section,option,"")
+      cfgfile = open(conf_path,'w')
+      config.write(cfgfile)
+      cfgfile.close()
+      return "added option"
 
 def options(section):
     options = config.options(section)
@@ -45,12 +49,13 @@ if dir != check_option('defult','base_dir'):
 #-----------------------------------------------------
 # For testing
 if __name__ == "__main__":
-   sections = config.sections()
-   print ("Config sections: " + str(sections))
-   check_section('test3')
+   #sections = config.sections()
+   #print ("Config sections: " + str(sections))
+   #check_section('test3')
    #options(sections[0])
    count = 0
-   for f in sections:
-     options(sections[count])
-     count = count + 1   
-   print check_option('special','new')
+   #for f in sections:
+    # options(sections[count])
+     #count = count + 1   
+   #print check_option('special','new')
+   #print check_option("8.8.8.8", "datetim")
