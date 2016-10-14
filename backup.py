@@ -1,8 +1,8 @@
 #!/usr/bin/python
 """
-asonste 30/June.2016
+asonste 14.Oct.2016
 For backing up all files in the base directory to a zip file.
-Latest changes: Changed to allow for autobackup
+Latest changes: Changed to include a copy of crontab 
 """
 import os, time
 from conf import *
@@ -12,6 +12,8 @@ target_dir = str(config.get('defult','backup_dir')) # Get backup directory from 
 today = target_dir + time.strftime('%Y%m%d')
 # The current time is the name of the zip archive
 now = time.strftime('%H%M%S')
+cp_crontabCMD = ('crontab -l > %s/crontab.txt'%source[0])
+os.system(cp_crontabCMD)
 def zip_backup(comment):
    if len(comment) == 0: # check if a comment was provided
         target = today + os.sep + now + '.zip'
