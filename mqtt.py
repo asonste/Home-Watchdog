@@ -2,9 +2,10 @@
 ##&/ -*- coding: latin-1 -*-
 ##/ -*- coding: utf-8 -*-
 """
-asonste 12/Oct.2016
+asonste 31/Oct.2016
 Main script for reading MQTT values, and acting on them.
 Note: script is to be run with sensor name as defined in .conf file as argument
+Latast Change: Disabled some unnecessary  printing and writing to file. get base_dir from conf
 """
 from log import log, dateandtime
 from conf import *
@@ -46,12 +47,13 @@ def on_message(client, userdata, msg):
      temp = float(str_temp)
      if temp != 20.44: # For some reason 20.44 chows up as first message. If statemet is for filtering it out.
         g.update(temp,1)# 1 is the bias. (Static/not used)
-        writefile('%s,newtemp'%(temp),'/home/pi/Documents/Home-Watchdog/%s.txt'%s.var)
-        write_config(s.var,'last-alive-time',dateandtime())
+        writefile('%s,newtemp'%(temp),'%s/%s.txt'%(base_dir,s.var)) #base_dir is imported from another script
+#        log('%s temp, %s sensor'%(temp,s.var))
+        #write_config(s.var,'last-alive-time',dateandtime())
         if __name__ == "__main__":
            os.system("clear")
            print_alarms(g)
-           print ("Last alive time: %s"%dateandtime())
+ #          print ("Last alive time: %s"%dateandtime())
         if "none_new" in g.alarm:
            text = "Reset alarm %s on sensor %s. Temp: %s"%(config.get(s.var,'stat'),s.name,temp)
            log(text)

@@ -11,6 +11,11 @@ def writevar(content,filepath):
        file1.write(content[lineno] + "\n")
     file1.close()
 
+def writefile(content,filepath):
+   file1 = open(filepath,'w')
+   file1.write(content)
+   file1.close()
+
 #--- For testing -------------
 if __name__ == "__main__":
    print "RUNNING EXAMPLE"

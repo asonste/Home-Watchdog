@@ -1,9 +1,9 @@
 #!/usr/bin/python
 """
-asonste 30/Sept.2016
+asonste 29/Oct.2016
 For loging events to a log file, and adding timestamp on the event
 One mandatory parameter (text) and one optional parameter (logfilepath).
-Latest changes: Minor change to dateandtime
+Latest changes: Minor correction to dateandtime in log defenition
 """
 from conf import *
 base = config.get('defult','base_dir')# Get defult logfilepath from .conf file
@@ -19,7 +19,7 @@ def dateandtime():
 def log(string,logfilepath=path):
    if allow_loging == "1":
       f = open(logfilepath, 'a') # a for append, w for write.
-      f.write(datetime + ' {0}\n'.format(string))
+      f.write(dateandtime() + ' {0}\n'.format(string))
       f.close() # Close the file
 
 #--- For testing -------------
