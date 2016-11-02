@@ -8,7 +8,7 @@ Latest changes: Changed check_option to automatically add option if it does not 
 import ConfigParser
 import os
 config = ConfigParser.ConfigParser(allow_no_value = True)
-base_dir = ("/home/pi/Home-Watchdog")# < SET YOUR BASE PATH HERE
+base_dir = ("/home/pi/Documents/Home-Watchdog")# < SET YOUR BASE PATH HERE
 conf_path = ('%s/usr.conf'%base_dir) # User config file)
 config.read(conf_path)
 def write_config(section,subsection,value):
