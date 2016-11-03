@@ -1,20 +1,22 @@
 #!/usr/bin/python
 """
-asonste 31.Oct.2016
+asonste 03.Nov.2016
 For backing up all files in the base directory to a zip file.
-Latest changes: Changed to include a copy of crontab, fstab, rsync to another diractory 
+Latest changes: Changed to get crontab user from conf file 
 """
 import os, time
 from conf import *
 from log import *
-source = [config.get('defult','base_dir')]# Get defult base path from .conf file
+source = [config.get('defult','base_dir')]          # Get defult base path from .conf file
 target_dir = str(config.get('defult','backup_dir')) # Get backup directory from .conf file
 remote_dir = str(config.get('defult','remote_dir')) # Get backup directory from .conf file
 today = target_dir + time.strftime('%Y%m%d')
 # The current time is the name of the zip archive
 now = time.strftime('%H%M%S')
-print"Copy crontab..."
-cp_crontabCMD = ('sudo rm %s/crontab.txt && crontab -u pi -l >> %s/crontab.txt'%(source[0],source[0]))
+user = str(config.get('defult','user')) # Get user form .conf file. Used for listing crontab
+
+print"Copy crontab for user %s..."%user
+cp_crontabCMD = ('sudo rm %s/crontab.txt && crontab -u %s -l >> %s/crontab.txt'%(source[0],user,source[0]))
 os.system(cp_crontabCMD)
 print "Copy fstab..."
 os.system('sudo rm fstab.txt && cat /etc/fstab >> fstab.txt') 
