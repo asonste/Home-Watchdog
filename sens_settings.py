@@ -1,8 +1,9 @@
 #!/usr/bin/python
 """
-asonste 30/Sept.2016
+asonste 12/Nov.2016
 For sefining variables for each sensor
 Each sensor becomes a class.
+Latest change: Disable stat, as it is not beeing used.
 """
 
 from conf import *
@@ -10,7 +11,7 @@ class sens(object):
    def __init__(self,var):
       self.var = var
       self.name = config.get(var,'name')
-      self.stat = config.get(var,'stat')
+#      self.stat = config.get(var,'stat')
       # Settings for High High alarm
       self.HH_lims = ""
       self.HH_enable = ""
