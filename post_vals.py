@@ -1,9 +1,9 @@
 #!/usr/bin/python
 """
-asonste 12/Nov.2016
+asonste 13/Nov.2016
 For posting reading values from sens.txt files and
 creating post string for emoncms and thingspeak.
-Latast change: split thingspeak post to separate file, add emoncms
+Latast change: Corrected comma minor error in emoncms string. 
 """
 import glob
 from readfile import *
@@ -25,12 +25,14 @@ def make_thingspeak_post_string(vals,sens_numbers):
 def make_emoncms_post_string(vals,sens_numbers):
 # Combine information in to a common string, for posting all values at the same tim$
    count = 0
+   count2 = 0
    poststring = []
    for s in vals:
-      if vals[count]!= None:
-         if count != 0:
+      if vals[count]!= None: 
+         if count2 != 0:
             poststring.append(',')
          poststring.append('sens%s:%s'%(sens_numbers[count],vals[count]))
+         count2 = count2 + 1
       count = count + 1
    return ''.join(poststring)
 
@@ -68,4 +70,6 @@ if 1 ==1:      # For funning one time
    print "Values: " + str(vals)                         # For debugging
    if len(thingspeak_post_string) != 0:                 # Only post if there is something to post
       thingspeak(thingspeak_key,thingspeak_post_string) # Post to thingspeak 
+     # print thingspeak_post_string
       emoncms(emoncms_key,emoncms_post_string)          # Post to emoncms
+     # print emoncms_post_string
